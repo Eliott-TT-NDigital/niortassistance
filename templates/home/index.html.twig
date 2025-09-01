@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Niort Assistant</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">NA</div>
+            <h1 class="title">Niort Assistant</h1>
+            <p class="subtitle">Posez vos questions et obtenez des réponses instantanées grâce à votre assistant interactif intelligent.</p>
+            <hr class="divider">
+        </header>
+
+        <div class="actions">
+            <button class="btn theme-toggle" onclick="toggleTheme()" aria-label="Changer de thème">
+                <span class="theme-icon">🌙</span>
+                <span class="theme-text">Mode sombre</span>
+            </button>
+            <button class="btn" onclick="location.reload()">
+                <span>🔄</span>
+                Actualiser
+            </button>
+            <button class="btn btn-primary" onclick="window.open('https://www.chatbase.co/dashboard/','_blank')">
+                <span>⚙️</span>
+                Configuration
+            </button>
+        </div>
+
+        <section class="faq">
+            {% for question in questions %}
+                <div class="card fade-in" tabindex="0">
+                    <h2 class="question">{{ question.title }}</h2>
+                    <div class="answer">
+                        {{ question.content }}
+                    </div>
+                </div>
+            {% else %}
+                <p>Aucune question pour le moment.</p>
+            {% endfor %}
+        </section>
+    </div>
+
+    <script src="{{ asset('js/script.js') }}"></script>
+</body>
+</html>

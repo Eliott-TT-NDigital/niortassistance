@@ -1,0 +1,769 @@
+/* Reset et base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Variables CSS pour thème IA - Couleurs Niort Frères */
+:root {
+    /* Palette Niort Frères avec touches IA */
+    --primary: #1e3a5f;          /* Bleu marine principal */
+    --primary-hover: #0f2847;    /* Bleu marine foncé */
+    --secondary: #2c5aa0;        /* Bleu secondaire */
+    --accent: #dc3545;           /* Rouge Niort Frères */
+    --accent-secondary: #ff4757; /* Rouge clair */
+    --success: #28a745;          /* Vert validation */
+    --warning: #ffc107;          /* Jaune alerte */
+    --error: #dc3545;            /* Rouge erreur */
+    
+    --bg-primary: #0a0f1a;       /* Fond très sombre */
+    --bg-secondary: #1a1f2e;     /* Fond secondaire */
+    --bg-card: #1e2738;          /* Fond cartes */
+    --bg-overlay: rgba(10, 15, 26, 0.95);
+    --bg-glass: rgba(30, 58, 95, 0.15);
+    --bg-neural: linear-gradient(135deg, #1e3a5f 0%, #dc3545 50%, #1e3a5f 100%);
+    
+    --text-primary: #ffffff;     /* Texte principal blanc */
+    --text-secondary: #b8c5d1;   /* Texte secondaire gris-bleu */
+    --text-muted: #7a8fa3;       /* Texte discret */
+    --text-inverse: #ffffff;     /* Texte inversé */
+    --text-ai: #64b5ff;          /* Texte IA bleu clair */
+    
+    --border: #2a3441;
+    --border-hover: #3d4c5c;
+    --border-ai: rgba(220, 53, 69, 0.3);
+    
+    --shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.6);
+    --shadow-card: 0 2px 16px rgba(0, 0, 0, 0.3);
+    --shadow-ai: 0 0 30px rgba(220, 53, 69, 0.3);
+    --shadow-glow: 0 0 50px rgba(220, 53, 69, 0.4);
+    --shadow-blue: 0 0 30px rgba(30, 58, 95, 0.4);
+    
+    --gradient-primary: linear-gradient(135deg, #1e3a5f 0%, #dc3545 50%, #2c5aa0 100%);
+    --gradient-neural: linear-gradient(135deg, #0a0f1a 0%, #1e3a5f 25%, #dc3545 50%, #1e3a5f 75%, #0a0f1a 100%);
+    --gradient-circuit: linear-gradient(45deg, transparent 48%, rgba(220, 53, 69, 0.1) 49%, rgba(220, 53, 69, 0.1) 51%, transparent 52%);
+    
+    --radius: 12px;
+    --radius-large: 20px;
+    --transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    --transition-fast: all 0.2s ease;
+    
+    /* Variables spécifiques IA */
+    --ai-pulse: 0 0 20px rgba(220, 53, 69, 0.6);
+    --neural-speed: 3s;
+    --circuit-size: 60px;
+}
+
+/* Mode clair alternatif */
+[data-theme="light"] {
+    --primary: #1e3a5f;
+    --primary-hover: #2c5aa0;
+    --secondary: #64b5ff;
+    --accent: #dc3545;
+    --accent-secondary: #ff4757;
+    
+    --bg-primary: #f8f9fa;
+    --bg-secondary: #ffffff;
+    --bg-card: #ffffff;
+    --bg-overlay: rgba(248, 249, 250, 0.95);
+    --bg-glass: rgba(30, 58, 95, 0.05);
+    
+    --text-primary: #1e3a5f;
+    --text-secondary: #495057;
+    --text-muted: #6c757d;
+    --text-inverse: #ffffff;
+    --text-ai: #1e3a5f;
+    
+    --border: #dee2e6;
+    --border-hover: #adb5bd;
+    --border-ai: rgba(30, 58, 95, 0.2);
+    
+    --shadow: 0 4px 20px rgba(30, 58, 95, 0.15);
+    --shadow-hover: 0 12px 40px rgba(30, 58, 95, 0.25);
+    --shadow-card: 0 2px 16px rgba(30, 58, 95, 0.1);
+    --shadow-ai: 0 0 30px rgba(30, 58, 95, 0.3);
+    --shadow-blue: 0 0 30px rgba(220, 53, 69, 0.3);
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.6;
+    min-height: 100vh;
+    overflow-x: hidden;
+    transition: var(--transition);
+    position: relative;
+}
+
+/* Background neural network sophistiqué avec couleurs Niort Frères */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 20% 30%, rgba(220, 53, 69, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 80% 70%, rgba(30, 58, 95, 0.12) 0%, transparent 40%),
+        radial-gradient(circle at 40% 90%, rgba(220, 53, 69, 0.06) 0%, transparent 35%),
+        radial-gradient(circle at 60% 10%, rgba(44, 90, 160, 0.08) 0%, transparent 30%);
+    pointer-events: none;
+    z-index: -2;
+    animation: neuralFlow 20s ease-in-out infinite;
+}
+
+body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--gradient-circuit);
+    background-size: var(--circuit-size) var(--circuit-size);
+    pointer-events: none;
+    z-index: -1;
+    opacity: 0.3;
+    animation: circuitPulse 8s linear infinite;
+}
+
+@keyframes neuralFlow {
+    0%, 100% { 
+        opacity: 1; 
+        filter: blur(0px) hue-rotate(0deg);
+    }
+    25% {
+        opacity: 0.7;
+        filter: blur(1px) hue-rotate(5deg);
+    }
+    50% { 
+        opacity: 0.9; 
+        filter: blur(0px) hue-rotate(10deg);
+    }
+    75% {
+        opacity: 0.8;
+        filter: blur(0.5px) hue-rotate(5deg);
+    }
+}
+
+@keyframes circuitPulse {
+    0% { 
+        transform: translate(0, 0) scale(1);
+        opacity: 0.3;
+    }
+    25% { 
+        transform: translate(-5px, -5px) scale(1.02);
+        opacity: 0.4;
+    }
+    50% { 
+        transform: translate(0, -10px) scale(1);
+        opacity: 0.3;
+    }
+    75% { 
+        transform: translate(5px, -5px) scale(0.98);
+        opacity: 0.35;
+    }
+    100% { 
+        transform: translate(0, 0) scale(1);
+        opacity: 0.3;
+    }
+}
+
+/* Container principal */
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+    position: relative;
+}
+
+/* Effet de nodes IA flottants - couleurs Niort Frères */
+.container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(3px 3px at 30px 50px, rgba(220, 53, 69, 0.4), transparent),
+        radial-gradient(2px 2px at 80px 90px, rgba(30, 58, 95, 0.3), transparent),
+        radial-gradient(1px 1px at 120px 30px, rgba(220, 53, 69, 0.5), transparent),
+        radial-gradient(2px 2px at 200px 120px, rgba(44, 90, 160, 0.4), transparent),
+        radial-gradient(1px 1px at 250px 60px, rgba(220, 53, 69, 0.3), transparent);
+    background-repeat: repeat;
+    background-size: 300px 150px;
+    animation: nodesFloat var(--neural-speed) linear infinite;
+    pointer-events: none;
+    z-index: -1;
+}
+
+@keyframes nodesFloat {
+    from { transform: translateY(0px) translateX(0px); }
+    to { transform: translateY(-150px) translateX(20px); }
+}
+
+/* Header avec style IA Niort Frères */
+.header {
+    text-align: center;
+    margin-bottom: 4rem;
+    position: relative;
+    animation: aiAwakening 1.5s ease-out;
+}
+
+@keyframes aiAwakening {
+    0% {
+        opacity: 0;
+        transform: translateY(-30px) scale(0.9);
+        filter: blur(10px);
+    }
+    50% {
+        opacity: 0.8;
+        filter: blur(2px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0px);
+    }
+}
+
+.logo {
+    width: 100px;
+    height: 100px;
+    background: var(--gradient-neural);
+    border-radius: var(--radius-large);
+    margin: 0 auto 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text-inverse);
+    box-shadow: 
+        var(--shadow),
+        var(--shadow-ai),
+        inset 0 2px 0 rgba(220, 53, 69, 0.3);
+    transition: var(--transition);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    border: 2px solid var(--border-ai);
+    animation: aiPulse 4s ease-in-out infinite;
+}
+
+.logo::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        linear-gradient(45deg, transparent 30%, rgba(220, 53, 69, 0.3) 50%, transparent 70%),
+        radial-gradient(circle, rgba(30, 58, 95, 0.2) 0%, transparent 70%);
+    transform: scale(0) rotate(0deg);
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    opacity: 0;
+}
+
+.logo::after {
+    content: '🔧';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 3rem;
+    z-index: 2;
+    filter: drop-shadow(0 0 10px rgba(220, 53, 69, 0.5));
+}
+
+.logo:hover::before {
+    opacity: 1;
+    transform: scale(1.2) rotate(180deg);
+}
+
+.logo:hover {
+    transform: translateY(-10px) scale(1.1);
+    box-shadow: 
+        var(--shadow-hover),
+        var(--shadow-glow),
+        0 0 80px rgba(220, 53, 69, 0.4),
+        var(--shadow-blue),
+        inset 0 2px 0 rgba(220, 53, 69, 0.5);
+    border-color: var(--accent);
+}
+
+@keyframes aiPulse {
+    0%, 100% { 
+        box-shadow: 
+            var(--shadow),
+            0 0 20px rgba(220, 53, 69, 0.3),
+            0 0 15px rgba(30, 58, 95, 0.2),
+            inset 0 2px 0 rgba(220, 53, 69, 0.3);
+    }
+    50% { 
+        box-shadow: 
+            var(--shadow),
+            0 0 40px rgba(220, 53, 69, 0.6),
+            0 0 30px rgba(30, 58, 95, 0.4),
+            inset 0 2px 0 rgba(220, 53, 69, 0.5);
+    }
+}
+
+.title {
+    font-size: clamp(2.8rem, 6vw, 4.5rem);
+    font-weight: 800;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 1rem;
+    letter-spacing: -0.03em;
+    position: relative;
+    display: inline-block;
+    text-shadow: 0 0 30px rgba(220, 53, 69, 0.3);
+}
+
+.title::after {
+    content: '';
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 4px;
+    background: var(--gradient-primary);
+    border-radius: 2px;
+    box-shadow: var(--shadow-ai);
+    animation: titleExpand 2.5s ease-out 0.8s forwards;
+}
+
+@keyframes titleExpand {
+    0% { width: 0; opacity: 0; }
+    50% { opacity: 1; }
+    100% { width: 70%; opacity: 1; }
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    max-width: 700px;
+    margin: 0 auto 2.5rem;
+    font-weight: 400;
+}
+
+.subtitle::before {
+    content: '▶ ';
+    color: var(--accent);
+    font-size: 0.9rem;
+    animation: blink 2s infinite;
+}
+
+@keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+}
+
+/* Boutons avec style IA Niort Frères */
+.actions {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 4rem;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.2rem 2.5rem;
+    background: var(--bg-glass);
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text-primary);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: var(--transition);
+    cursor: pointer;
+    backdrop-filter: blur(30px) saturate(200%);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 
+        var(--shadow-card),
+        inset 0 1px 0 rgba(220, 53, 69, 0.1);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(220, 53, 69, 0.3), transparent);
+    transition: left 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.btn::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: radial-gradient(circle, rgba(30, 58, 95, 0.4) 0%, transparent 70%);
+    transform: translate(-50%, -50%);
+    transition: all 0.6s ease;
+    border-radius: 50%;
+}
+
+.btn:hover::before {
+    left: 100%;
+}
+
+.btn:hover::after {
+    width: 200%;
+    height: 200%;
+}
+
+.btn:hover {
+    transform: translateY(-6px) scale(1.05);
+    border-color: var(--border-ai);
+    box-shadow: 
+        var(--shadow-hover),
+        var(--shadow-ai),
+        var(--shadow-blue),
+        0 0 40px rgba(220, 53, 69, 0.3),
+        inset 0 1px 0 rgba(220, 53, 69, 0.2);
+    background: var(--bg-card);
+    color: var(--text-ai);
+}
+
+.btn-primary {
+    background: var(--gradient-primary);
+    border-color: var(--accent);
+    color: var(--text-inverse);
+    box-shadow: 
+        var(--shadow-card),
+        var(--shadow-ai),
+        var(--shadow-blue);
+}
+
+.btn-primary:hover {
+    box-shadow: 
+        var(--shadow-hover),
+        var(--shadow-glow),
+        0 0 60px rgba(220, 53, 69, 0.5),
+        0 0 40px rgba(30, 58, 95, 0.4);
+    transform: translateY(-6px) scale(1.05);
+}
+
+/* Cards avec style neural Niort Frères */
+.faq {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.card {
+    background: var(--bg-glass);
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    padding: 2.5rem;
+    cursor: pointer;
+    transition: var(--transition);
+    backdrop-filter: blur(30px) saturate(200%);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 
+        var(--shadow-card),
+        inset 0 1px 0 rgba(220, 53, 69, 0.1);
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 6px;
+    background: var(--gradient-primary);
+    transform: scaleX(0);
+    transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transform-origin: left;
+}
+
+.card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 15% 15%, rgba(220, 53, 69, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(30, 58, 95, 0.08) 0%, transparent 40%);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+}
+
+.card:hover::before {
+    transform: scaleX(1);
+    box-shadow: var(--shadow-ai), var(--shadow-blue);
+}
+
+.card:hover::after {
+    opacity: 1;
+}
+
+.card:hover {
+    transform: translateY(-10px) scale(1.03);
+    border-color: var(--border-ai);
+    box-shadow: 
+        var(--shadow-hover),
+        var(--shadow-ai),
+        var(--shadow-blue),
+        0 0 50px rgba(220, 53, 69, 0.2),
+        inset 0 1px 0 rgba(220, 53, 69, 0.2);
+    background: var(--bg-card);
+}
+
+.card.expanded {
+    border-color: var(--accent);
+    box-shadow: 
+        var(--shadow-hover),
+        var(--shadow-glow),
+        var(--shadow-blue),
+        inset 0 1px 0 rgba(220, 53, 69, 0.3);
+    background: var(--bg-card);
+    transform: translateY(-8px) scale(1.02);
+}
+
+.card.expanded::before {
+    transform: scaleX(1);
+    background: var(--gradient-neural);
+    height: 8px;
+    box-shadow: var(--shadow-glow), var(--shadow-blue);
+}
+
+.question {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    line-height: 1.4;
+}
+
+.question::before {
+    content: '◦';
+    font-size: 1.8rem;
+    color: var(--primary);
+    transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(220, 53, 69, 0.1);
+    border: 2px solid rgba(220, 53, 69, 0.2);
+    position: relative;
+}
+
+.question::after {
+    content: '';
+    position: absolute;
+    left: 44px;
+    top: 16px;
+    width: 20px;
+    height: 2px;
+    background: var(--gradient-primary);
+    opacity: 0;
+    transform: scaleX(0);
+    transition: all 0.4s ease;
+    border-radius: 1px;
+}
+
+.card.expanded .question::before {
+    transform: rotate(180deg) scale(1.2);
+    color: var(--accent);
+    background: rgba(220, 53, 69, 0.2);
+    border-color: var(--accent);
+    box-shadow: var(--ai-pulse), 0 0 15px rgba(30, 58, 95, 0.4);
+    content: '●';
+}
+
+.card.expanded .question::after {
+    opacity: 1;
+    transform: scaleX(1);
+}
+
+.answer {
+    color: var(--text-secondary);
+    line-height: 1.8;
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.5s ease;
+    opacity: 0;
+    font-size: 1rem;
+}
+
+.answer.expanded {
+    max-height: 300px;
+    opacity: 1;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 2px solid var(--border-ai);
+}
+
+/* Animations d'entrée avec style IA */
+.fade-in {
+    opacity: 0;
+    transform: translateY(40px) scale(0.9);
+    filter: blur(4px);
+    animation: aiMaterialize 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.fade-in:nth-child(1) { animation-delay: 0.2s; }
+.fade-in:nth-child(2) { animation-delay: 0.4s; }
+.fade-in:nth-child(3) { animation-delay: 0.6s; }
+.fade-in:nth-child(4) { animation-delay: 0.8s; }
+
+@keyframes aiMaterialize {
+    0% {
+        opacity: 0;
+        transform: translateY(40px) scale(0.9);
+        filter: blur(4px);
+    }
+    50% {
+        opacity: 0.8;
+        filter: blur(1px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0px);
+    }
+}
+
+/* Theme toggle avec style IA Niort Frères */
+.theme-toggle {
+    position: relative;
+    background: var(--bg-neural);
+    border: 2px solid var(--border-ai);
+}
+
+.theme-toggle:hover {
+    box-shadow: var(--shadow-glow), var(--shadow-blue);
+    border-color: var(--accent);
+}
+
+.theme-icon {
+    font-size: 1.1rem;
+    filter: drop-shadow(0 0 5px rgba(220, 53, 69, 0.5));
+}
+
+/* Responsive avec optimisations IA */
+@media (max-width: 768px) {
+    .container {
+        padding: 1.5rem;
+    }
+    
+    .header {
+        margin-bottom: 2.5rem;
+    }
+    
+    .faq {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .actions {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+    
+    .btn {
+        width: 100%;
+        max-width: 320px;
+        justify-content: center;
+        padding: 1rem 2rem;
+    }
+    
+    .title {
+        font-size: 2.8rem;
+    }
+    
+    .logo {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .logo::after {
+        font-size: 2.5rem;
+    }
+}
+
+/* États de focus pour l'accessibilité */
+.btn:focus,
+.card:focus {
+    outline: 3px solid var(--accent);
+    outline-offset: 3px;
+    box-shadow: var(--shadow-glow), var(--shadow-blue);
+}
+
+/* Transitions globales pour le changement de thème */
+* {
+    transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* Scrollbar personnalisée Niort Frères */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--gradient-primary);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent);
+    box-shadow: var(--shadow-ai);
+}
+
+/* Smooth scroll */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Effets spéciaux Niort Frères */
+.divider {
+    width: 80px;
+    height: 4px;
+    background: var(--gradient-primary);
+    border: none;
+    border-radius: 2px;
+    margin: 0 auto;
+    box-shadow: var(--shadow-ai), var(--shadow-blue);
+}

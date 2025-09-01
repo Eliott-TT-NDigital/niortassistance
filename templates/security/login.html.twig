@@ -1,0 +1,166 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion - Niort Assistant{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/login.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="login-container">
+    <div class="login-card">
+        
+        <!-- Header avec logo IA -->
+        <div class="login-header">
+            <div class="login-logo"></div>
+            <h1 class="login-title">Connexion</h1>
+            <p class="login-subtitle">Accès Administrateur</p>
+        </div>
+
+        <!-- Message d'erreur -->
+        {% if error %}
+            <div class="alert alert-danger" role="alert">
+                <strong>⚠️ Erreur :</strong> 
+                {{ error.messageKey|trans(error.messageData, 'security') }}
+            </div>
+        {% endif %}
+
+        <!-- Message utilisateur déjà connecté -->
+        {% if app.user %}
+            <div class="user-info" role="status">
+                <strong>Vous êtes connecté avec {{ app.user.userIdentifier }}</strong>
+                <br>
+                <a href="{{ path('app_logout') }}" class="logout-link">Se déconnecter</a>
+            </div>
+        {% endif %}
+
+        <!-- Formulaire de connexion -->
+        <form method="post" class="login-form" novalidate>
+            
+            <!-- Champ Email -->
+            <div class="form-group">
+                <label for="inputEmail" class="form-label">
+                     Adresse email
+                </label>
+                <input 
+                    type="email" 
+                    value="{{ last_username }}" 
+                    name="email" 
+                    id="inputEmail" 
+                    class="form-control" 
+                    autocomplete="email" 
+                    required 
+                    autofocus
+                    placeholder="votre.email@groupeniort.fr"
+                    aria-describedby="emailHelp"
+                >
+            </div>
+
+            <!-- Champ Mot de passe -->
+            <div class="form-group">
+                <label for="inputPassword" class="form-label">
+                    Mot de passe
+                </label>
+                <input 
+                    type="password" 
+                    name="password" 
+                    id="inputPassword" 
+                    class="form-control" 
+                    autocomplete="current-password" 
+                    required
+                    placeholder="••••••••••••"
+                    aria-describedby="passwordHelp"
+                >
+            </div>
+
+            <!-- Token CSRF -->
+            <input 
+                type="hidden" 
+                name="_csrf_token" 
+                data-controller="csrf-protection" 
+                value="{{ csrf_token('authenticate') }}"
+            >
+
+            <!-- Checkbox Se souvenir -->
+            <div class="checkbox-group">
+                <div class="custom-checkbox">
+                    <input 
+                        type="checkbox" 
+                        name="_remember_me" 
+                        id="rememberMe"
+                        aria-describedby="rememberHelp"
+                    >
+                </div>
+                <label for="rememberMe" class="checkbox-label">
+                    Se souvenir de moi 
+                </label>
+            </div>
+
+            <!-- Bouton de connexion -->
+            <button 
+                class="btn-login" 
+                type="submit"
+                aria-describedby="submitHelp"
+            >
+                Se connecter
+            </button>
+
+        </form>
+    </div>
+</div>
+
+<!-- Script pour les animations d'erreur -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Animation d'erreur sur les champs invalides
+    const form = document.querySelector('.login-form');
+    const inputs = form.querySelectorAll('.form-control');
+    
+    form.addEventListener('submit', function(e) {
+        let hasError = false;
+        
+        inputs.forEach(input => {
+            input.classList.remove('error');
+            
+            if (!input.value.trim()) {
+                input.classList.add('error');
+                hasError = true;
+            }
+            
+            // Validation email
+            if (input.type === 'email' && input.value.trim()) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(input.value)) {
+                    input.classList.add('error');
+                    hasError = true;
+                }
+            }
+        });
+        
+        // Empêcher la soumission si erreur client
+        if (hasError) {
+            e.preventDefault();
+        }
+    });
+    
+    // Nettoyage des erreurs au focus
+    inputs.forEach(input => {
+        input.addEventListener('focus', function() {
+            this.classList.remove('error');
+        });
+    });
+    
+    // Animation du logo au clic
+    const logo = document.querySelector('.login-logo');
+    if (logo) {
+        logo.addEventListener('click', function() {
+            this.style.transform = 'scale(1.1) rotate(360deg)';
+            setTimeout(() => {
+                this.style.transform = '';
+            }, 500);
+        });
+    }
+});
+</script>
+{% endblock %}
