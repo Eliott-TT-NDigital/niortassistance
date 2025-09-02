@@ -12,22 +12,42 @@
     <button class="theme-toggle-corner" onclick="toggleTheme()" aria-label="Changer de thème">
         <span class="theme-icon">🌙</span>
     </button>
-
+    
     <!-- Bouton connexion en bas à gauche -->
     <a href="/admin" class="login-btn" title="Se connecter">
         <span>👤</span>
     </a>
 
     <div class="container">
+<!-- REMPLACE LA SECTION HEADER DANS TON INDEX.HTML.TWIG PAR CECI -->
         <header class="header">
             <div class="logo">
-                 <img src="{{ asset('images/niort-logo.png') }}" alt="Niort Assistant Logo">
+                <img src="{{ asset('images/niort-logo.png') }}" alt="Niort Assistant Logo">
             </div>
             <h1 class="title">Niort Assistant</h1>
             <p class="subtitle">Posez vos questions et obtenez des réponses instantanées grâce à votre assistant interactif intelligent.</p>
+            
+            <!-- BARRE DE RECHERCHE - NOUVEAU -->
+            <div class="search-container">
+                <div class="search-wrapper">
+                    <span class="search-icon">🔍</span>
+                    <input 
+                        type="text" 
+                        class="search-input" 
+                        placeholder="Rechercher une question..."
+                        autocomplete="off"
+                        spellcheck="false"
+                        id="searchInput"
+                    >
+                    <button class="search-clear" id="searchClear" title="Effacer la recherche">
+                        ✕
+                    </button>
+                </div>
+                <div class="search-results-info" id="searchResultsInfo"></div>
+            </div>
+            <!-- FIN BARRE DE RECHERCHE -->            
             <hr class="divider">
         </header>
-
         <main class="content">
             {% if categories|length > 0 %}
                 {% for category in categories %}

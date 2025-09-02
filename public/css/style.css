@@ -683,8 +683,215 @@ body::after {
     padding-top: 1rem;
     border-top: 2px solid var(--border-ai);
 }
+/* ===== BARRE DE RECHERCHE - A AJOUTER A LA FIN DE STYLE.CSS ===== */
 
-/* Messages d'état */
-.no-questions,
-.no-categories {
-    text
+/* Container de recherche */
+.search-container {
+    position: relative;
+    max-width: 600px;
+    margin: 0 auto 2.5rem;
+    z-index: 100;
+}
+
+.search-wrapper {
+    position: relative;
+    background: var(--bg-glass);
+    border: 2px solid var(--border);
+    border-radius: var(--radius-large);
+    backdrop-filter: blur(30px) saturate(200%);
+    box-shadow: var(--shadow-card);
+    transition: var(--transition);
+    overflow: hidden;
+}
+
+.search-wrapper::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 20% 50%, rgba(220, 53, 69, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 80% 50%, rgba(30, 58, 95, 0.05) 0%, transparent 40%);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.search-wrapper:focus-within::before {
+    opacity: 1;
+}
+
+.search-wrapper:focus-within {
+    border-color: var(--border-ai);
+    box-shadow: 
+        var(--shadow-hover),
+        var(--shadow-ai),
+        var(--shadow-blue);
+    transform: scale(1.02);
+}
+
+.search-input {
+    width: 100%;
+    padding: 1rem 1.2rem 1rem 3.5rem;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text-primary);
+    font-size: 1rem;
+    font-weight: 500;
+    font-family: inherit;
+}
+
+.search-input::placeholder {
+    color: var(--text-muted);
+    opacity: 0.7;
+}
+
+.search-icon {
+    position: absolute;
+    left: 1.2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    color: var(--text-ai);
+    font-size: 1.1rem;
+    pointer-events: none;
+    transition: var(--transition);
+}
+
+.search-wrapper:focus-within .search-icon {
+    color: var(--accent);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.search-clear {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+    background: rgba(220, 53, 69, 0.1);
+    border: 1px solid rgba(220, 53, 69, 0.3);
+    border-radius: 50%;
+    color: var(--accent);
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    transition: var(--transition);
+}
+
+.search-clear:hover {
+    background: rgba(220, 53, 69, 0.2);
+    border-color: var(--accent);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.search-clear.visible {
+    display: flex;
+}
+
+/* Indicateur de résultats */
+.search-results-info {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    padding: 0.8rem;
+    background: var(--bg-glass);
+    border-radius: var(--radius);
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--border);
+    display: none;
+}
+
+.search-results-info.visible {
+    display: block;
+    animation: fadeInUp 0.4s ease-out;
+}
+
+.search-results-info.error {
+    border-color: var(--accent);
+    background: rgba(220, 53, 69, 0.1);
+    color: var(--text-primary);
+}
+
+.search-results-info.success {
+    border-color: var(--success);
+    background: rgba(40, 167, 69, 0.1);
+    color: var(--text-primary);
+}
+
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Animation pour les cartes filtrées */
+.card.search-filtered {
+    opacity: 0.3;
+    transform: scale(0.95);
+    pointer-events: none;
+    transition: all 0.4s ease;
+}
+
+.card.search-match {
+    opacity: 1;
+    transform: scale(1);
+    border-color: var(--accent);
+    box-shadow: 
+        var(--shadow-hover),
+        var(--shadow-ai),
+        0 0 30px rgba(220, 53, 69, 0.3);
+}
+
+/* Highlight des résultats de recherche */
+.search-highlight {
+    background: rgba(220, 53, 69, 0.2);
+    color: var(--text-primary);
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-weight: 600;
+    box-shadow: 0 0 10px rgba(220, 53, 69, 0.3);
+}
+
+/* Chatbot link styling */
+.chatbot-link {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+    border-bottom: 1px solid transparent;
+    transition: var(--transition);
+}
+
+.chatbot-link:hover {
+    border-bottom-color: var(--accent);
+    color: var(--accent-secondary);
+}
+
+/* Responsive pour la recherche */
+@media (max-width: 768px) {
+    .search-container {
+        margin: 0 auto 2rem;
+    }
+    
+    .search-input {
+        padding: 0.9rem 1rem 0.9rem 3rem;
+        font-size: 0.95rem;
+    }
+    
+    .search-icon {
+        left: 1rem;
+    }
+}
