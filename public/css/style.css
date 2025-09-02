@@ -45,8 +45,8 @@
     --gradient-neural: linear-gradient(135deg, #0a0f1a 0%, #1e3a5f 25%, #dc3545 50%, #1e3a5f 75%, #0a0f1a 100%);
     --gradient-circuit: linear-gradient(45deg, transparent 48%, rgba(220, 53, 69, 0.1) 49%, rgba(220, 53, 69, 0.1) 51%, transparent 52%);
     
-    --radius: 12px;
-    --radius-large: 20px;
+    --radius: 8px;
+    --radius-large: 16px;
     --transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     --transition-fast: all 0.2s ease;
     
@@ -54,6 +54,12 @@
     --ai-pulse: 0 0 20px rgba(220, 53, 69, 0.6);
     --neural-speed: 3s;
     --circuit-size: 60px;
+    
+    /* Variables de taille pour un affichage plus compact */
+    --base-font-size: 14px;
+    --container-max-width: 1200px;
+    --header-spacing: 2.5rem;
+    --section-spacing: 2rem;
 }
 
 /* Mode clair alternatif */
@@ -89,9 +95,10 @@
 
 body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: var(--base-font-size);
     background: var(--bg-primary);
     color: var(--text-primary);
-    line-height: 1.6;
+    line-height: 1.5;
     min-height: 100vh;
     overflow-x: hidden;
     transition: var(--transition);
@@ -173,47 +180,112 @@ body::after {
     }
 }
 
-/* Container principal */
+/* Bouton thème en haut à droite */
+.theme-toggle-corner {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 45px;
+    height: 45px;
+    background: var(--bg-glass);
+    border: 2px solid var(--border);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition);
+    backdrop-filter: blur(20px);
+    z-index: 1000;
+    box-shadow: var(--shadow-card);
+}
+
+.theme-toggle-corner:hover {
+    transform: scale(1.1) rotate(10deg);
+    border-color: var(--border-ai);
+    box-shadow: var(--shadow-ai), var(--shadow-blue);
+    background: var(--bg-card);
+}
+
+.theme-toggle-corner .theme-icon {
+    font-size: 1.2rem;
+    filter: drop-shadow(0 0 5px rgba(220, 53, 69, 0.5));
+    transition: var(--transition);
+}
+
+.theme-toggle-corner:hover .theme-icon {
+    transform: rotate(-10deg);
+}
+
+/* Bouton connexion en bas à gauche */
+.login-btn {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    width: 45px;
+    height: 45px;
+    background: var(--bg-glass);
+    border: 2px solid var(--border);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: var(--text-primary);
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: var(--transition);
+    backdrop-filter: blur(20px);
+    z-index: 1000;
+    box-shadow: var(--shadow-card);
+}
+
+.login-btn:hover {
+    transform: scale(1.1) translateY(-2px);
+    border-color: var(--border-ai);
+    box-shadow: 
+        var(--shadow-hover),
+        var(--shadow-ai), 
+        var(--shadow-blue),
+        0 0 40px rgba(220, 53, 69, 0.3);
+    background: var(--bg-card);
+    color: var(--text-ai);
+}
+
+.login-btn span {
+    filter: drop-shadow(0 0 5px rgba(220, 53, 69, 0.5));
+    transition: var(--transition);
+}
+
+.login-btn:hover span {
+    transform: scale(1.1);
+}
+
+/* Container principal plus compact */
 .container {
-    max-width: 1400px;
+    max-width: var(--container-max-width);
     margin: 0 auto;
-    padding: 2rem;
+    padding: 1.5rem;
     position: relative;
 }
 
-/* Effet de nodes IA flottants - couleurs Niort Frères */
-.container::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: 
-        radial-gradient(3px 3px at 30px 50px, rgba(220, 53, 69, 0.4), transparent),
-        radial-gradient(2px 2px at 80px 90px, rgba(30, 58, 95, 0.3), transparent),
-        radial-gradient(1px 1px at 120px 30px, rgba(220, 53, 69, 0.5), transparent),
-        radial-gradient(2px 2px at 200px 120px, rgba(44, 90, 160, 0.4), transparent),
-        radial-gradient(1px 1px at 250px 60px, rgba(220, 53, 69, 0.3), transparent);
-    background-repeat: repeat;
-    background-size: 300px 150px;
-    animation: nodesFloat var(--neural-speed) linear infinite;
-    pointer-events: none;
-    z-index: -1;
-}
-
-@keyframes nodesFloat {
-    from { transform: translateY(0px) translateX(0px); }
-    to { transform: translateY(-150px) translateX(20px); }
-}
-
-/* Header avec style IA Niort Frères */
+/* Header avec style IA Niort Frères - plus compact */
 .header {
     text-align: center;
-    margin-bottom: 4rem;
+    margin-bottom: var(--header-spacing);
     position: relative;
     animation: aiAwakening 1.5s ease-out;
 }
+
+.logo img {
+    width: 20%;       /* ajuste selon besoin */
+    height: auto;     /* garde les proportions */
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;   /* centre l’image */
+}
+
+
 
 @keyframes aiAwakening {
     0% {
@@ -232,16 +304,16 @@ body::after {
     }
 }
 
-.logo {
-    width: 100px;
-    height: 100px;
+/* .logo {
+    width: 70px;
+    height: 70px;
     background: var(--gradient-neural);
     border-radius: var(--radius-large);
-    margin: 0 auto 2rem;
+    margin: 0 auto 1.5rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2.5rem;
+    font-size: 1.8rem;
     font-weight: 700;
     color: var(--text-inverse);
     box-shadow: 
@@ -271,32 +343,21 @@ body::after {
     opacity: 0;
 }
 
-.logo::after {
-    content: '🔧';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 3rem;
-    z-index: 2;
-    filter: drop-shadow(0 0 10px rgba(220, 53, 69, 0.5));
-}
-
 .logo:hover::before {
     opacity: 1;
     transform: scale(1.2) rotate(180deg);
 }
 
 .logo:hover {
-    transform: translateY(-10px) scale(1.1);
+    transform: translateY(-8px) scale(1.1);
     box-shadow: 
         var(--shadow-hover),
         var(--shadow-glow),
-        0 0 80px rgba(220, 53, 69, 0.4),
+        0 0 60px rgba(220, 53, 69, 0.4),
         var(--shadow-blue),
         inset 0 2px 0 rgba(220, 53, 69, 0.5);
     border-color: var(--accent);
-}
+} */
 
 @keyframes aiPulse {
     0%, 100% { 
@@ -316,13 +377,13 @@ body::after {
 }
 
 .title {
-    font-size: clamp(2.8rem, 6vw, 4.5rem);
+    font-size: clamp(2rem, 5vw, 3.2rem);
     font-weight: 800;
     background: var(--gradient-primary);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    margin-bottom: 1rem;
+    margin-bottom: 0.8rem;
     letter-spacing: -0.03em;
     position: relative;
     display: inline-block;
@@ -332,11 +393,11 @@ body::after {
 .title::after {
     content: '';
     position: absolute;
-    bottom: -15px;
+    bottom: -10px;
     left: 50%;
     transform: translateX(-50%);
     width: 0;
-    height: 4px;
+    height: 3px;
     background: var(--gradient-primary);
     border-radius: 2px;
     box-shadow: var(--shadow-ai);
@@ -350,17 +411,17 @@ body::after {
 }
 
 .subtitle {
-    font-size: 1.2rem;
+    font-size: 1rem;
     color: var(--text-secondary);
-    max-width: 700px;
-    margin: 0 auto 2.5rem;
+    max-width: 600px;
+    margin: 0 auto 1.5rem;
     font-weight: 400;
 }
 
 .subtitle::before {
     content: '▶ ';
     color: var(--accent);
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     animation: blink 2s infinite;
 }
 
@@ -369,117 +430,104 @@ body::after {
     51%, 100% { opacity: 0; }
 }
 
-/* Boutons avec style IA Niort Frères */
-.actions {
-    display: flex;
-    gap: 1.5rem;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-bottom: 4rem;
+/* Contenu principal */
+.content {
+    width: 100%;
 }
 
-.btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 1.2rem 2.5rem;
-    background: var(--bg-glass);
-    border: 2px solid var(--border);
-    border-radius: var(--radius);
-    color: var(--text-primary);
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 1rem;
-    transition: var(--transition);
-    cursor: pointer;
-    backdrop-filter: blur(30px) saturate(200%);
+/* Sections de catégories - séparation verticale claire */
+.category-section {
+    margin-bottom: var(--section-spacing);
+    padding-bottom: var(--section-spacing);
+    border-bottom: 2px solid var(--border);
     position: relative;
-    overflow: hidden;
-    box-shadow: 
-        var(--shadow-card),
-        inset 0 1px 0 rgba(220, 53, 69, 0.1);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
 }
 
-.btn::before {
+.category-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.category-section::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 4px;
+    background: var(--gradient-primary);
+    border-radius: 2px;
+    opacity: 0;
+    animation: categoryLineAppear 1s ease-out 0.5s forwards;
+}
+
+.category-section:last-child::after {
+    display: none;
+}
+
+@keyframes categoryLineAppear {
+    0% { width: 0; opacity: 0; }
+    100% { width: 60px; opacity: 1; }
+}
+
+/* Titres de catégorie */
+.category-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-align: center;
+    margin-bottom: 1.5rem;
+    padding: 1rem 0;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    position: relative;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.category-title::before {
     content: '';
     position: absolute;
     top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(220, 53, 69, 0.3), transparent);
-    transition: left 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 3px;
+    background: var(--gradient-primary);
+    border-radius: 2px;
+    box-shadow: var(--shadow-ai);
 }
 
-.btn::after {
+.category-title::after {
     content: '';
     position: absolute;
-    top: 50%;
+    bottom: 0;
     left: 50%;
-    width: 0;
-    height: 0;
-    background: radial-gradient(circle, rgba(30, 58, 95, 0.4) 0%, transparent 70%);
-    transform: translate(-50%, -50%);
-    transition: all 0.6s ease;
-    border-radius: 50%;
-}
-
-.btn:hover::before {
-    left: 100%;
-}
-
-.btn:hover::after {
-    width: 200%;
-    height: 200%;
-}
-
-.btn:hover {
-    transform: translateY(-6px) scale(1.05);
-    border-color: var(--border-ai);
-    box-shadow: 
-        var(--shadow-hover),
-        var(--shadow-ai),
-        var(--shadow-blue),
-        0 0 40px rgba(220, 53, 69, 0.3),
-        inset 0 1px 0 rgba(220, 53, 69, 0.2);
-    background: var(--bg-card);
-    color: var(--text-ai);
-}
-
-.btn-primary {
+    transform: translateX(-50%);
+    width: 80px;
+    height: 2px;
     background: var(--gradient-primary);
-    border-color: var(--accent);
-    color: var(--text-inverse);
-    box-shadow: 
-        var(--shadow-card),
-        var(--shadow-ai),
-        var(--shadow-blue);
+    border-radius: 2px;
+    box-shadow: var(--shadow-ai);
 }
 
-.btn-primary:hover {
-    box-shadow: 
-        var(--shadow-hover),
-        var(--shadow-glow),
-        0 0 60px rgba(220, 53, 69, 0.5),
-        0 0 40px rgba(30, 58, 95, 0.4);
-    transform: translateY(-6px) scale(1.05);
-}
-
-/* Cards avec style neural Niort Frères */
-.faq {
+/* Grid des questions */
+.questions-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
-    gap: 2rem;
-    margin-bottom: 3rem;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 1.2rem;
 }
 
+/* Cards avec style neural Niort Frères - plus compactes et cliquables */
 .card {
     background: var(--bg-glass);
     border: 2px solid var(--border);
     border-radius: var(--radius);
-    padding: 2.5rem;
+    padding: 1.8rem;
     cursor: pointer;
     transition: var(--transition);
     backdrop-filter: blur(30px) saturate(200%);
@@ -488,6 +536,7 @@ body::after {
     box-shadow: 
         var(--shadow-card),
         inset 0 1px 0 rgba(220, 53, 69, 0.1);
+    user-select: none;
 }
 
 .card::before {
@@ -496,7 +545,7 @@ body::after {
     top: 0;
     left: 0;
     width: 100%;
-    height: 6px;
+    height: 4px;
     background: var(--gradient-primary);
     transform: scaleX(0);
     transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -528,7 +577,7 @@ body::after {
 }
 
 .card:hover {
-    transform: translateY(-10px) scale(1.03);
+    transform: translateY(-6px) scale(1.02);
     border-color: var(--border-ai);
     box-shadow: 
         var(--shadow-hover),
@@ -539,6 +588,10 @@ body::after {
     background: var(--bg-card);
 }
 
+.card:active {
+    transform: translateY(-4px) scale(1.01);
+}
+
 .card.expanded {
     border-color: var(--accent);
     box-shadow: 
@@ -547,35 +600,35 @@ body::after {
         var(--shadow-blue),
         inset 0 1px 0 rgba(220, 53, 69, 0.3);
     background: var(--bg-card);
-    transform: translateY(-8px) scale(1.02);
+    transform: translateY(-6px) scale(1.02);
 }
 
 .card.expanded::before {
     transform: scaleX(1);
     background: var(--gradient-neural);
-    height: 8px;
+    height: 6px;
     box-shadow: var(--shadow-glow), var(--shadow-blue);
 }
 
 .question {
-    font-size: 1.3rem;
+    font-size: 1.1rem;
     font-weight: 700;
     color: var(--text-primary);
-    margin-bottom: 0.8rem;
+    margin-bottom: 0.6rem;
     display: flex;
     align-items: center;
-    gap: 1.2rem;
+    gap: 1rem;
     line-height: 1.4;
 }
 
 .question::before {
     content: '◦';
-    font-size: 1.8rem;
+    font-size: 1.4rem;
     color: var(--primary);
     transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     flex-shrink: 0;
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -588,9 +641,9 @@ body::after {
 .question::after {
     content: '';
     position: absolute;
-    left: 44px;
-    top: 16px;
-    width: 20px;
+    left: 40px;
+    top: 14px;
+    width: 16px;
     height: 2px;
     background: var(--gradient-primary);
     opacity: 0;
@@ -600,7 +653,7 @@ body::after {
 }
 
 .card.expanded .question::before {
-    transform: rotate(180deg) scale(1.2);
+    transform: rotate(180deg) scale(1.1);
     color: var(--accent);
     background: rgba(220, 53, 69, 0.2);
     border-color: var(--accent);
@@ -615,155 +668,23 @@ body::after {
 
 .answer {
     color: var(--text-secondary);
-    line-height: 1.8;
+    line-height: 1.6;
     max-height: 0;
     overflow: hidden;
     transition: all 0.5s ease;
     opacity: 0;
-    font-size: 1rem;
+    font-size: 0.9rem;
 }
 
 .answer.expanded {
     max-height: 300px;
     opacity: 1;
-    margin-top: 1.5rem;
-    padding-top: 1.5rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
     border-top: 2px solid var(--border-ai);
 }
 
-/* Animations d'entrée avec style IA */
-.fade-in {
-    opacity: 0;
-    transform: translateY(40px) scale(0.9);
-    filter: blur(4px);
-    animation: aiMaterialize 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-}
-
-.fade-in:nth-child(1) { animation-delay: 0.2s; }
-.fade-in:nth-child(2) { animation-delay: 0.4s; }
-.fade-in:nth-child(3) { animation-delay: 0.6s; }
-.fade-in:nth-child(4) { animation-delay: 0.8s; }
-
-@keyframes aiMaterialize {
-    0% {
-        opacity: 0;
-        transform: translateY(40px) scale(0.9);
-        filter: blur(4px);
-    }
-    50% {
-        opacity: 0.8;
-        filter: blur(1px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-        filter: blur(0px);
-    }
-}
-
-/* Theme toggle avec style IA Niort Frères */
-.theme-toggle {
-    position: relative;
-    background: var(--bg-neural);
-    border: 2px solid var(--border-ai);
-}
-
-.theme-toggle:hover {
-    box-shadow: var(--shadow-glow), var(--shadow-blue);
-    border-color: var(--accent);
-}
-
-.theme-icon {
-    font-size: 1.1rem;
-    filter: drop-shadow(0 0 5px rgba(220, 53, 69, 0.5));
-}
-
-/* Responsive avec optimisations IA */
-@media (max-width: 768px) {
-    .container {
-        padding: 1.5rem;
-    }
-    
-    .header {
-        margin-bottom: 2.5rem;
-    }
-    
-    .faq {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-    }
-    
-    .actions {
-        flex-direction: column;
-        align-items: center;
-        gap: 1rem;
-    }
-    
-    .btn {
-        width: 100%;
-        max-width: 320px;
-        justify-content: center;
-        padding: 1rem 2rem;
-    }
-    
-    .title {
-        font-size: 2.8rem;
-    }
-    
-    .logo {
-        width: 80px;
-        height: 80px;
-    }
-    
-    .logo::after {
-        font-size: 2.5rem;
-    }
-}
-
-/* États de focus pour l'accessibilité */
-.btn:focus,
-.card:focus {
-    outline: 3px solid var(--accent);
-    outline-offset: 3px;
-    box-shadow: var(--shadow-glow), var(--shadow-blue);
-}
-
-/* Transitions globales pour le changement de thème */
-* {
-    transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
-}
-
-/* Scrollbar personnalisée Niort Frères */
-::-webkit-scrollbar {
-    width: 8px;
-}
-
-::-webkit-scrollbar-track {
-    background: var(--bg-secondary);
-}
-
-::-webkit-scrollbar-thumb {
-    background: var(--gradient-primary);
-    border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: var(--accent);
-    box-shadow: var(--shadow-ai);
-}
-
-/* Smooth scroll */
-html {
-    scroll-behavior: smooth;
-}
-
-/* Effets spéciaux Niort Frères */
-.divider {
-    width: 80px;
-    height: 4px;
-    background: var(--gradient-primary);
-    border: none;
-    border-radius: 2px;
-    margin: 0 auto;
-    box-shadow: var(--shadow-ai), var(--shadow-blue);
-}
+/* Messages d'état */
+.no-questions,
+.no-categories {
+    text

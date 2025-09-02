@@ -2,8 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Question;
-use App\Repository\QuestionRepository;
+use App\Repository\CategoryRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -11,14 +10,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class HomeController extends AbstractController
 {
     #[Route('/', name: 'app_home')]
-    public function index(QuestionRepository $questionRepository): Response
+    public function index(CategoryRepository $categoryRepository): Response
     {
-        // Récupère toutes les questions depuis la base
-        $questions = $questionRepository->findAll();
+        $categories = $categoryRepository->findAll();
 
         return $this->render('home/index.html.twig', [
-            'controller_name' => 'HomeController',
-            'questions' => $questions, // <-- ajoute cette ligne
+            'categories' => $categories,
         ]);
     }
 }

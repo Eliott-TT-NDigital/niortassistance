@@ -1,4 +1,4 @@
-/* CSS LOGIN - Style IA Niort Frères */
+/* CSS LOGIN - Style IA Niort Frères - Tailles Optimisées */
 
 /* Variables spécifiques au login */
 :root {
@@ -28,19 +28,19 @@
     --border-hover: #3d4c5c;
     --border-ai: rgba(220, 53, 69, 0.3);
     
-    --shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-    --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.6);
-    --shadow-card: 0 2px 16px rgba(0, 0, 0, 0.3);
-    --shadow-ai: 0 0 30px rgba(220, 53, 69, 0.3);
-    --shadow-glow: 0 0 50px rgba(220, 53, 69, 0.4);
-    --shadow-blue: 0 0 30px rgba(30, 58, 95, 0.4);
+    --shadow: 0 3px 15px rgba(0, 0, 0, 0.4);
+    --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.6);
+    --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.3);
+    --shadow-ai: 0 0 20px rgba(220, 53, 69, 0.3);
+    --shadow-glow: 0 0 35px rgba(220, 53, 69, 0.4);
+    --shadow-blue: 0 0 20px rgba(30, 58, 95, 0.4);
     
     --gradient-primary: linear-gradient(135deg, #1e3a5f 0%, #dc3545 50%, #2c5aa0 100%);
     --gradient-neural: linear-gradient(135deg, #0a0f1a 0%, #1e3a5f 25%, #dc3545 50%, #1e3a5f 75%, #0a0f1a 100%);
     --gradient-circuit: linear-gradient(45deg, transparent 48%, rgba(220, 53, 69, 0.1) 49%, rgba(220, 53, 69, 0.1) 51%, transparent 52%);
     
-    --radius: 12px;
-    --radius-large: 20px;
+    --radius: 10px;
+    --radius-large: 16px;
     --transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     --transition-fast: all 0.2s ease;
 }
@@ -56,7 +56,7 @@ body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     background: var(--bg-primary);
     color: var(--text-primary);
-    line-height: 1.6;
+    line-height: 1.5;
     min-height: 100vh;
     overflow-x: hidden;
     display: flex;
@@ -91,7 +91,7 @@ body::after {
     width: 100%;
     height: 100%;
     background: var(--gradient-circuit);
-    background-size: 60px 60px;
+    background-size: 50px 50px;
     pointer-events: none;
     z-index: -1;
     opacity: 0.3;
@@ -143,8 +143,8 @@ body::after {
 /* Container principal login */
 .login-container {
     width: 100%;
-    max-width: 480px;
-    padding: 2rem;
+    max-width: 420px;
+    padding: 1.5rem;
     position: relative;
     animation: loginMaterialize 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 }
@@ -152,8 +152,8 @@ body::after {
 @keyframes loginMaterialize {
     0% {
         opacity: 0;
-        transform: translateY(-50px) scale(0.9);
-        filter: blur(10px);
+        transform: translateY(-40px) scale(0.9);
+        filter: blur(8px);
     }
     50% {
         opacity: 0.8;
@@ -171,7 +171,7 @@ body::after {
     background: var(--bg-glass);
     border: 2px solid var(--border);
     border-radius: var(--radius-large);
-    padding: 3rem;
+    padding: 2.5rem;
     backdrop-filter: blur(30px) saturate(200%);
     position: relative;
     overflow: hidden;
@@ -188,7 +188,7 @@ body::after {
     top: 0;
     left: 0;
     width: 100%;
-    height: 6px;
+    height: 5px;
     background: var(--gradient-primary);
     box-shadow: var(--shadow-ai), var(--shadow-blue);
 }
@@ -210,83 +210,70 @@ body::after {
 /* Header login avec logo IA */
 .login-header {
     text-align: center;
-    margin-bottom: 2.5rem;
+    margin-bottom: 2rem;
     position: relative;
     z-index: 1;
 }
 
 .login-logo {
-    width: 80px;
-    height: 80px;
-    background: var(--gradient-neural);
+    width: 120px;
+    height: 120px;
     border-radius: var(--radius-large);
-    margin: 0 auto 1.5rem;
+    margin: 0 auto 1.2rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--text-inverse);
-    box-shadow: 
-        var(--shadow),
-        var(--shadow-ai),
-        inset 0 2px 0 rgba(220, 53, 69, 0.3);
-    border: 2px solid var(--border-ai);
-    animation: aiPulse 4s ease-in-out infinite;
     position: relative;
-    overflow: hidden;
+    overflow: visible;
+    background: none;
 }
 
-.login-logo::after {
-    content: '🔧';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 2.2rem;
-    z-index: 2;
-    filter: drop-shadow(0 0 10px rgba(220, 53, 69, 0.5));
+.logo-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
 }
 
 @keyframes aiPulse {
     0%, 100% { 
         box-shadow: 
             var(--shadow),
-            0 0 20px rgba(220, 53, 69, 0.3),
-            0 0 15px rgba(30, 58, 95, 0.2),
+            0 0 15px rgba(220, 53, 69, 0.3),
+            0 0 12px rgba(30, 58, 95, 0.2),
             inset 0 2px 0 rgba(220, 53, 69, 0.3);
     }
     50% { 
         box-shadow: 
             var(--shadow),
-            0 0 40px rgba(220, 53, 69, 0.6),
-            0 0 30px rgba(30, 58, 95, 0.4),
+            0 0 30px rgba(220, 53, 69, 0.6),
+            0 0 25px rgba(30, 58, 95, 0.4),
             inset 0 2px 0 rgba(220, 53, 69, 0.5);
     }
 }
 
 .login-title {
-    font-size: 2.2rem;
+    font-size: 1.9rem;
     font-weight: 800;
     background: var(--gradient-primary);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.4rem;
     letter-spacing: -0.02em;
-    text-shadow: 0 0 30px rgba(220, 53, 69, 0.3);
+    text-shadow: 0 0 25px rgba(220, 53, 69, 0.3);
 }
 
 .login-subtitle {
     color: var(--text-secondary);
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-weight: 400;
 }
 
 .login-subtitle::before {
     content: '▶ ';
     color: var(--accent);
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     animation: blink 2s infinite;
 }
 
@@ -297,9 +284,9 @@ body::after {
 
 /* Messages d'alerte */
 .alert {
-    padding: 1rem 1.5rem;
+    padding: 0.9rem 1.3rem;
     border-radius: var(--radius);
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.3rem;
     position: relative;
     z-index: 1;
     backdrop-filter: blur(20px);
@@ -312,7 +299,7 @@ body::after {
     border-color: var(--error);
     color: #ff6b7a;
     box-shadow: 
-        0 4px 20px rgba(220, 53, 69, 0.2),
+        0 3px 15px rgba(220, 53, 69, 0.2),
         inset 0 1px 0 rgba(220, 53, 69, 0.1);
 }
 
@@ -321,7 +308,7 @@ body::after {
     border-color: var(--success);
     color: #4caf50;
     box-shadow: 
-        0 4px 20px rgba(40, 167, 69, 0.2),
+        0 3px 15px rgba(40, 167, 69, 0.2),
         inset 0 1px 0 rgba(40, 167, 69, 0.1);
 }
 
@@ -330,8 +317,8 @@ body::after {
     background: var(--bg-glass);
     border: 2px solid var(--border-ai);
     border-radius: var(--radius);
-    padding: 1.2rem;
-    margin-bottom: 2rem;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
     text-align: center;
     backdrop-filter: blur(20px);
     position: relative;
@@ -342,8 +329,8 @@ body::after {
 .user-info::before {
     content: '👤';
     display: inline-block;
-    margin-right: 0.8rem;
-    font-size: 1.2rem;
+    margin-right: 0.7rem;
+    font-size: 1.1rem;
     filter: drop-shadow(0 0 5px rgba(220, 53, 69, 0.5));
 }
 
@@ -358,7 +345,7 @@ body::after {
 .logout-link:hover {
     color: var(--accent-secondary);
     border-bottom-color: var(--accent);
-    text-shadow: 0 0 10px rgba(220, 53, 69, 0.5);
+    text-shadow: 0 0 8px rgba(220, 53, 69, 0.5);
 }
 
 /* Formulaire de login */
@@ -368,7 +355,7 @@ body::after {
 }
 
 .form-group {
-    margin-bottom: 2rem;
+    margin-bottom: 1.7rem;
     position: relative;
 }
 
@@ -376,8 +363,8 @@ body::after {
     display: block;
     font-weight: 600;
     color: var(--text-primary);
-    margin-bottom: 0.8rem;
-    font-size: 0.95rem;
+    margin-bottom: 0.7rem;
+    font-size: 0.9rem;
     letter-spacing: 0.02em;
     position: relative;
 }
@@ -385,7 +372,7 @@ body::after {
 .form-label::after {
     content: '';
     position: absolute;
-    bottom: -4px;
+    bottom: -3px;
     left: 0;
     width: 0;
     height: 2px;
@@ -396,12 +383,12 @@ body::after {
 
 .form-control {
     width: 100%;
-    padding: 1.2rem 1.5rem;
+    padding: 1rem 1.3rem;
     background: var(--bg-glass);
     border: 2px solid var(--border);
     border-radius: var(--radius);
     color: var(--text-primary);
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: 500;
     transition: var(--transition);
     backdrop-filter: blur(20px);
@@ -420,10 +407,10 @@ body::after {
     box-shadow: 
         var(--shadow-ai),
         var(--shadow-blue),
-        0 0 30px rgba(220, 53, 69, 0.2),
+        0 0 25px rgba(220, 53, 69, 0.2),
         inset 0 2px 4px rgba(0, 0, 0, 0.1);
     background: var(--bg-card);
-    transform: translateY(-2px);
+    transform: translateY(-1px);
 }
 
 .form-control:focus + .form-label::after,
@@ -435,8 +422,8 @@ body::after {
 .checkbox-group {
     display: flex;
     align-items: center;
-    gap: 0.8rem;
-    margin-bottom: 2rem;
+    gap: 0.7rem;
+    margin-bottom: 1.7rem;
     position: relative;
     z-index: 1;
 }
@@ -444,8 +431,8 @@ body::after {
 .custom-checkbox {
     position: relative;
     display: inline-block;
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
 }
 
 .custom-checkbox input[type="checkbox"] {
@@ -461,8 +448,8 @@ body::after {
     position: absolute;
     top: 0;
     left: 0;
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
     border: 2px solid var(--border);
     border-radius: 4px;
     background: var(--bg-glass);
@@ -478,9 +465,9 @@ body::after {
     transform: translate(-50%, -50%) scale(0);
     color: var(--text-inverse);
     font-weight: bold;
-    font-size: 14px;
+    font-size: 12px;
     transition: var(--transition);
-    text-shadow: 0 0 5px rgba(220, 53, 69, 0.5);
+    text-shadow: 0 0 4px rgba(220, 53, 69, 0.5);
 }
 
 .custom-checkbox input[type="checkbox"]:checked + .custom-checkbox::before,
@@ -490,7 +477,7 @@ body::after {
     box-shadow: 
         var(--shadow-ai),
         var(--shadow-blue),
-        0 0 20px rgba(220, 53, 69, 0.3);
+        0 0 15px rgba(220, 53, 69, 0.3);
 }
 
 .custom-checkbox input[type="checkbox"]:checked + .custom-checkbox::after,
@@ -500,7 +487,7 @@ body::after {
 
 .checkbox-label {
     color: var(--text-secondary);
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     cursor: pointer;
     user-select: none;
     transition: var(--transition-fast);
@@ -513,15 +500,15 @@ body::after {
 /* Bouton de connexion */
 .btn-login {
     width: 100%;
-    padding: 1.3rem 2rem;
+    padding: 1.1rem 1.8rem;
     background: var(--gradient-primary);
     border: 2px solid var(--accent);
     border-radius: var(--radius);
     color: var(--text-inverse);
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.04em;
     cursor: pointer;
     transition: var(--transition);
     position: relative;
@@ -547,11 +534,11 @@ body::after {
 .btn-login::after {
     content: '🚀';
     position: absolute;
-    right: 1.5rem;
+    right: 1.3rem;
     top: 50%;
     transform: translateY(-50%) scale(0);
     transition: var(--transition);
-    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.5));
 }
 
 .btn-login:hover::before {
@@ -563,12 +550,12 @@ body::after {
 }
 
 .btn-login:hover {
-    transform: translateY(-4px) scale(1.02);
+    transform: translateY(-3px) scale(1.02);
     box-shadow: 
         var(--shadow-hover),
         var(--shadow-glow),
-        0 0 60px rgba(220, 53, 69, 0.5),
-        0 0 40px rgba(30, 58, 95, 0.4);
+        0 0 50px rgba(220, 53, 69, 0.5),
+        0 0 35px rgba(30, 58, 95, 0.4);
 }
 
 .btn-login:active {
@@ -588,28 +575,24 @@ input[type="hidden"] {
     }
     
     .login-card {
-        padding: 2rem;
+        padding: 1.8rem;
         border-radius: var(--radius);
     }
     
     .login-title {
-        font-size: 1.8rem;
+        font-size: 1.6rem;
     }
     
     .login-logo {
-        width: 60px;
-        height: 60px;
-    }
-    
-    .login-logo::after {
-        font-size: 1.8rem;
+        width: 100px;
+        height: 100px;
     }
 }
 
 @media (max-width: 480px) {
     body {
         align-items: flex-start;
-        padding-top: 2rem;
+        padding-top: 1.5rem;
     }
     
     .login-container {
@@ -617,16 +600,16 @@ input[type="hidden"] {
     }
     
     .login-card {
-        padding: 1.5rem;
+        padding: 1.3rem;
     }
     
     .form-control {
-        padding: 1rem;
+        padding: 0.9rem;
     }
     
     .btn-login {
-        padding: 1.1rem;
-        font-size: 1rem;
+        padding: 1rem;
+        font-size: 0.95rem;
     }
 }
 
@@ -634,8 +617,8 @@ input[type="hidden"] {
 .form-control:focus,
 .btn-login:focus,
 .custom-checkbox:focus-within {
-    outline: 3px solid var(--accent);
-    outline-offset: 3px;
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
 }
 
 /* Animations d'erreur */
@@ -643,7 +626,7 @@ input[type="hidden"] {
     border-color: var(--error);
     animation: shake 0.5s ease-in-out;
     box-shadow: 
-        0 0 20px rgba(220, 53, 69, 0.5),
+        0 0 15px rgba(220, 53, 69, 0.5),
         inset 0 2px 4px rgba(220, 53, 69, 0.1);
 }
 
@@ -652,7 +635,7 @@ input[type="hidden"] {
         transform: translateX(0);
     }
     10%, 30%, 50%, 70%, 90% {
-        transform: translateX(-8px);
+        transform: translateX(-6px);
     }
 }
 

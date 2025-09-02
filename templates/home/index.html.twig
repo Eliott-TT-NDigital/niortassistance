@@ -4,47 +4,77 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Niort Assistant</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 </head>
 <body>
+    <!-- Bouton thème en haut à droite -->
+    <button class="theme-toggle-corner" onclick="toggleTheme()" aria-label="Changer de thème">
+        <span class="theme-icon">🌙</span>
+    </button>
+
+    <!-- Bouton connexion en bas à gauche -->
+    <a href="/admin" class="login-btn" title="Se connecter">
+        <span>👤</span>
+    </a>
+
     <div class="container">
         <header class="header">
-            <div class="logo">NA</div>
+            <div class="logo">
+                 <img src="{{ asset('images/niort-logo.png') }}" alt="Niort Assistant Logo">
+            </div>
             <h1 class="title">Niort Assistant</h1>
             <p class="subtitle">Posez vos questions et obtenez des réponses instantanées grâce à votre assistant interactif intelligent.</p>
             <hr class="divider">
         </header>
 
-        <div class="actions">
-            <button class="btn theme-toggle" onclick="toggleTheme()" aria-label="Changer de thème">
-                <span class="theme-icon">🌙</span>
-                <span class="theme-text">Mode sombre</span>
-            </button>
-            <button class="btn" onclick="location.reload()">
-                <span>🔄</span>
-                Actualiser
-            </button>
-            <button class="btn btn-primary" onclick="window.open('https://www.chatbase.co/dashboard/','_blank')">
-                <span>⚙️</span>
-                Configuration
-            </button>
-        </div>
-
-        <section class="faq">
-            {% for question in questions %}
-                <div class="card fade-in" tabindex="0">
-                    <h2 class="question">{{ question.title }}</h2>
-                    <div class="answer">
-                        {{ question.content }}
-                    </div>
-                </div>
+        <main class="content">
+            {% if categories|length > 0 %}
+                {% for category in categories %}
+                    <section class="category-section">
+                        <h2 class="category-title">{{ category.name }}</h2>
+                        
+                        <div class="questions-grid">
+                            {% if category.questions|length > 0 %}
+                                {% for question in category.questions %}
+                                    <div class="card fade-in" tabindex="0">
+                                        <h3 class="question">{{ question.title }}</h3>
+                                        <div class="answer">
+                                            {{ question.content }}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <p class="no-questions">Aucune question dans cette catégorie.</p>
+                            {% endif %}
+                        </div>
+                    </section>
+                {% endfor %}
             {% else %}
-                <p>Aucune question pour le moment.</p>
-            {% endfor %}
-        </section>
+                <div class="no-categories">
+                    <p>Aucune catégorie trouvée.</p>
+                </div>
+            {% endif %}
+        </main>
     </div>
 
     <script src="{{ asset('js/script.js') }}"></script>
+      <script>
+    (function(){
+      if(!window.chatbase || window.chatbase("getState")!=="initialized"){
+        window.chatbase=(...args)=>{(window.chatbase.q=window.chatbase.q||[]).push(args)};
+      }
+      const onLoad=function(){
+        const script=document.createElement("script");
+        script.src="https://www.chatbase.co/embed.min.js";
+        script.id="6knjac3THVFxv9czJZUqt";
+        script.domain="www.chatbase.co";
+        document.body.appendChild(script);
+      };
+      document.readyState==="complete" ? onLoad() : window.addEventListener("load", onLoad);
+    })();
+  </script>
+
+
 </body>
 </html>
