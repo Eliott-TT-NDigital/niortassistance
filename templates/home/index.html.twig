@@ -18,8 +18,12 @@
         <span>👤</span>
     </a>
 
+    <!-- Bouton chatbot rond et compact à droite en bas -->
+    <button class="chatbot-btn-compact" onclick="openChatbot()" aria-label="Ouvrir le chatbot" title="Discuter avec l'assistant IA">
+        <span class="chatbot-icon-compact">🤖</span>
+    </button>
+
     <div class="container">
-<!-- REMPLACE LA SECTION HEADER DANS TON INDEX.HTML.TWIG PAR CECI -->
         <header class="header">
             <div class="logo">
                 <img src="{{ asset('images/niort-logo.png') }}" alt="Niort Assistant Logo">
@@ -27,7 +31,7 @@
             <h1 class="title">Niort Assistant</h1>
             <p class="subtitle">Posez vos questions et obtenez des réponses instantanées grâce à votre assistant interactif intelligent.</p>
             
-            <!-- BARRE DE RECHERCHE - NOUVEAU -->
+            <!-- BARRE DE RECHERCHE -->
             <div class="search-container">
                 <div class="search-wrapper">
                     <span class="search-icon">🔍</span>
@@ -48,6 +52,7 @@
             <!-- FIN BARRE DE RECHERCHE -->            
             <hr class="divider">
         </header>
+        
         <main class="content">
             {% if categories|length > 0 %}
                 {% for category in categories %}
@@ -78,23 +83,66 @@
         </main>
     </div>
 
+    <!-- Le modal chatbot est maintenant créé dynamiquement via JavaScript -->
+    
     <script src="{{ asset('js/script.js') }}"></script>
-      <script>
-    (function(){
-      if(!window.chatbase || window.chatbase("getState")!=="initialized"){
-        window.chatbase=(...args)=>{(window.chatbase.q=window.chatbase.q||[]).push(args)};
-      }
-      const onLoad=function(){
-        const script=document.createElement("script");
-        script.src="https://www.chatbase.co/embed.min.js";
-        script.id="6knjac3THVFxv9czJZUqt";
-        script.domain="www.chatbase.co";
-        document.body.appendChild(script);
-      };
-      document.readyState==="complete" ? onLoad() : window.addEventListener("load", onLoad);
-    })();
-  </script>
+    
+    <!-- Script pour masquer le bouton Chatbase par défaut -->
+    <script>
+        // Masquer le bouton Chatbase par défaut quand il apparaît
+        function hideChatbaseButton() {
+            const chatbaseButton = document.querySelector('#chatbase-bubble-button, [id*="chatbase"], [class*="chatbase-bubble"], .chatbase-bubble-button');
+            if (chatbaseButton) {
+                chatbaseButton.style.display = 'none';
+                chatbaseButton.style.visibility = 'hidden';
+                chatbaseButton.style.opacity = '0';
+                chatbaseButton.style.pointerEvents = 'none';
+            }
+        }
 
+        // Observer pour détecter l'apparition du bouton Chatbase
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.addedNodes.length) {
+                    hideChatbaseButton();
+                }
+            });
+        });
 
+        // Démarrer l'observation
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+
+        // Masquer immédiatement et vérifier périodiquement
+        setInterval(hideChatbaseButton, 500);
+        
+        // Masquer au chargement
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(hideChatbaseButton, 1000);
+            setTimeout(hideChatbaseButton, 3000);
+            setTimeout(hideChatbaseButton, 5000);
+        });
+    </script>
+
+    <script>
+        (function(){
+            if(!window.chatbase || window.chatbase("getState")!=="initialized"){
+                window.chatbase=(...args)=>{(window.chatbase.q=window.chatbase.q||[]).push(args)};
+            }
+            const onLoad=function(){
+                const script=document.createElement("script");
+                script.src="https://www.chatbase.co/embed.min.js";
+                script.id="6knjac3THVFxv9czJZUqt";
+                script.domain="www.chatbase.co";
+                document.body.appendChild(script);
+                
+                // Masquer le bouton après le chargement du script
+                setTimeout(hideChatbaseButton, 1000);
+            };
+            document.readyState==="complete" ? onLoad() : window.addEventListener("load", onLoad);
+        })();
+    </script>
 </body>
 </html>

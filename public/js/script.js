@@ -239,91 +239,7 @@ function initPerformanceOptimizations() {
     });
 }
 
-// Fonction d'initialisation principale
-function initApplication() {
-    try {
-        detectSystemTheme();
-        initTheme();
-        initFAQ();
-        initAnimations();
-        initLogoEffects();
-        watchSystemTheme();
-        initErrorHandling();
-        initPerformanceOptimizations();
-        
-        console.log('✅ Niort Assistant initialisé avec succès');
-    } catch (error) {
-        console.error('❌ Erreur lors de l\'initialisation:', error);
-        // Application minimale en cas d'erreur
-        initTheme();
-        initFAQ();
-    }
-}
-
-// Initialisation au chargement de la page
-document.addEventListener('DOMContentLoaded', initApplication);
-
-// Gestion des raccourcis clavier - Version étendue
-document.addEventListener('keydown', (e) => {
-    try {
-        // Ctrl/Cmd + D pour changer de thème
-        if ((e.ctrlKey || e.metaKey) && e.key === 'd') {
-            e.preventDefault();
-            toggleTheme();
-        }
-        
-        // Echap pour fermer toutes les cartes FAQ
-        if (e.key === 'Escape') {
-            closeAllCards();
-        }
-        
-        // Ctrl/Cmd + Shift + O pour ouvrir toutes les cartes
-        if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'O') {
-            e.preventDefault();
-            openAllCards();
-        }
-        
-        // Ctrl/Cmd + Shift + C pour fermer toutes les cartes
-        if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'C') {
-            e.preventDefault();
-            closeAllCards();
-        }
-        
-        // Home pour scroll vers le haut
-        if (e.key === 'Home' && !e.target.matches('input, textarea')) {
-            e.preventDefault();
-            scrollToTop();
-        }
-    } catch (error) {
-        console.warn('Erreur dans la gestion des raccourcis clavier:', error);
-    }
-});
-
-// Exposition des fonctions globales pour compatibilité
-window.toggleTheme = toggleTheme;
-window.toggleCard = toggleCard;
-window.handleCardKeydown = handleCardKeydown;
-window.scrollToTop = scrollToTop;
-window.closeAllCards = closeAllCards;
-window.openAllCards = openAllCards;
-
-// Fonction de nettoyage pour éviter les fuites mémoire
-window.addEventListener('beforeunload', () => {
-    // Nettoyer les observers et listeners si nécessaire
-    document.removeEventListener('keydown', () => {});
-});
-
-// Export pour utilisation en module si nécessaire
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = {
-        toggleTheme,
-        toggleCard,
-        handleCardKeydown,
-        initApplication
-    };
-}
-
-// ===== FONCTIONNALITÉ DE RECHERCHE - A AJOUTER A LA FIN DE SCRIPT.JS =====
+// ===== FONCTIONNALITÉ DE RECHERCHE =====
 
 // Configuration de la recherche
 const SEARCH_CONFIG = {
@@ -336,6 +252,8 @@ const SEARCH_CONFIG = {
 let searchTimeout = null;
 let questionsData = [];
 let isSearchActive = false;
+let currentSearchResults = [];
+let highlightTimeout = null;
 
 // Initialisation de la recherche
 function initSearch() {
@@ -424,7 +342,7 @@ function handleSearchKeydown(e) {
                 e.preventDefault();
                 const query = e.target.value.trim();
                 if (query.length >= SEARCH_CONFIG.minLength) {
-                    performSearch(query, true); // Force search on Enter
+                    performSearch(query, true);
                 }
                 break;
             case 'Escape':
@@ -444,14 +362,15 @@ function performSearch(query, forceSearch = false) {
             clearSearchFilters();
             updateSearchResultsInfo('');
             isSearchActive = false;
+            currentSearchResults = [];
             return;
         }
 
         isSearchActive = true;
         const results = searchQuestions(query);
+        currentSearchResults = results;
         
         if (results.length > 0) {
-            // Ouvrir et faire défiler vers la première correspondance
             const firstMatch = results[0];
             openAndScrollToQuestion(firstMatch.element);
             applySearchFilters(results);
@@ -478,17 +397,14 @@ function searchQuestions(query) {
             const categoryLower = item.category.toLowerCase();
             
             searchTerms.forEach(term => {
-                // Score pour correspondance exacte dans la question (poids élevé)
                 if (questionLower.includes(term)) {
                     score += questionLower.indexOf(term) === 0 ? 10 : 5;
                 }
                 
-                // Score pour correspondance dans la réponse
                 if (answerLower.includes(term)) {
                     score += 2;
                 }
                 
-                // Score pour correspondance dans la catégorie
                 if (categoryLower.includes(term)) {
                     score += 3;
                 }
@@ -499,7 +415,6 @@ function searchQuestions(query) {
             }
         });
 
-        // Trier par score décroissant
         return results.sort((a, b) => b.score - a.score);
     } catch (error) {
         console.error('❌ Erreur dans searchQuestions:', error);
@@ -507,10 +422,47 @@ function searchQuestions(query) {
     }
 }
 
+// Fonction pour nettoyer complètement la surbrillance d'une carte
+function removeCardHighlight(cardElement) {
+    try {
+        if (!cardElement) return;
+        
+        // Supprimer la classe de surbrillance
+        cardElement.classList.remove('search-highlight-active');
+        
+        // Simuler un mouseout pour forcer la suppression du hover
+        const mouseOutEvent = new MouseEvent('mouseout', {
+            view: window,
+            bubbles: true,
+            cancelable: true
+        });
+        cardElement.dispatchEvent(mouseOutEvent);
+        
+        // Forcer la suppression complète
+        cardElement.style.cssText = '';
+        cardElement.removeAttribute('style');
+        
+        // Double reflow pour être sûr
+        cardElement.offsetHeight;
+        cardElement.offsetWidth;
+        
+    } catch (error) {
+        console.error('❌ Erreur dans removeCardHighlight:', error);
+    }
+}
+
 // Ouvrir une carte et faire défiler vers elle
 function openAndScrollToQuestion(cardElement) {
     try {
         if (!cardElement) return;
+        
+        // Nettoyer tout timeout de surbrillance précédent
+        if (highlightTimeout) {
+            clearTimeout(highlightTimeout);
+        }
+        
+        // Nettoyer toute surbrillance existante sur cette carte
+        removeCardHighlight(cardElement);
         
         // Ouvrir la carte si elle n'est pas déjà ouverte
         if (!cardElement.classList.contains('expanded')) {
@@ -524,16 +476,8 @@ function openAndScrollToQuestion(cardElement) {
                 block: 'center'
             });
             
-            // Effet visuel temporaire pour mettre en évidence
-            const originalBoxShadow = cardElement.style.boxShadow;
-            cardElement.style.boxShadow = `
-                0 0 40px rgba(220, 53, 69, 0.6),
-                0 0 60px rgba(30, 58, 95, 0.4)
-            `;
-            
-            setTimeout(() => {
-                cardElement.style.boxShadow = originalBoxShadow;
-            }, 2000);
+            // Appliquer l'effet de surbrillance temporaire
+            applyTemporaryHighlight(cardElement);
             
         }, cardElement.classList.contains('expanded') ? 0 : 300);
     } catch (error) {
@@ -541,9 +485,28 @@ function openAndScrollToQuestion(cardElement) {
     }
 }
 
+// Fonction pour appliquer la surbrillance temporaire
+function applyTemporaryHighlight(cardElement) {
+    try {
+        // Ajouter une classe CSS temporaire pour la surbrillance
+        cardElement.classList.add('search-highlight-active');
+        
+        // Programmer la suppression de l'effet après 2 secondes
+        highlightTimeout = setTimeout(() => {
+            removeCardHighlight(cardElement);
+            highlightTimeout = null;
+        }, 2000);
+        
+    } catch (error) {
+        console.error('❌ Erreur dans applyTemporaryHighlight:', error);
+    }
+}
+
 // Appliquer les filtres visuels aux résultats de recherche
 function applySearchFilters(results) {
     try {
+        clearSearchFilters();
+        
         const resultIds = results.map(r => r.id.toString());
         const allCards = document.querySelectorAll('.card');
         
@@ -551,11 +514,9 @@ function applySearchFilters(results) {
             const cardId = card.dataset.questionId;
             
             if (resultIds.includes(cardId)) {
-                card.classList.remove('search-filtered');
                 card.classList.add('search-match');
             } else {
                 card.classList.add('search-filtered');
-                card.classList.remove('search-match');
             }
         });
     } catch (error) {
@@ -569,7 +530,13 @@ function clearSearchFilters() {
         const allCards = document.querySelectorAll('.card');
         allCards.forEach(card => {
             card.classList.remove('search-filtered', 'search-match');
+            removeCardHighlight(card);
         });
+        
+        if (highlightTimeout) {
+            clearTimeout(highlightTimeout);
+            highlightTimeout = null;
+        }
     } catch (error) {
         console.error('❌ Erreur dans clearSearchFilters:', error);
     }
@@ -590,7 +557,7 @@ function updateSearchResultsInfo(query, resultCount = 0, type = '') {
         let className = '';
         
         if (resultCount === 0) {
-            message = `🚫 Aucun résultat pour "<strong>${escapeHtml(query)}</strong>". <a href="https://www.chatbase.co/chatbot-iframe/6knjac3THVFxv9czJZUqt?theme=dark" class="chatbot-link">Poser la question à notre chatbot !</a>`;
+            message = `🚫 Aucun résultat pour "<strong>${escapeHtml(query)}</strong>". <a href="#" class="chatbot-link" onclick="openChatbot('${escapeHtml(query)}')">Poser la question à notre chatbot !</a>`;
             className = 'error';
         } else if (resultCount === 1) {
             message = `✅ 1 question trouvée pour "<strong>${escapeHtml(query)}</strong>"`;
@@ -630,6 +597,17 @@ function clearSearch() {
         
         clearSearchFilters();
         isSearchActive = false;
+        currentSearchResults = [];
+        
+        const allCards = document.querySelectorAll('.card');
+        allCards.forEach(card => {
+            removeCardHighlight(card);
+        });
+        
+        if (highlightTimeout) {
+            clearTimeout(highlightTimeout);
+            highlightTimeout = null;
+        }
     } catch (error) {
         console.error('❌ Erreur dans clearSearch:', error);
     }
@@ -642,8 +620,81 @@ function escapeHtml(text) {
     return div.innerHTML;
 }
 
-// MODIFICATION DE LA FONCTION initApplication EXISTANTE
-// Remplace ta fonction initApplication existante par celle-ci :
+// ===== GESTION DU CHATBOT =====
+
+// Ouvrir le chatbot avec une question pré-remplie - NOUVELLE VERSION CENTRÉE
+function openChatbot(query = '') {
+    try {
+        let overlay = document.getElementById('chatbot-overlay');
+        
+        // Créer l'overlay s'il n'existe pas
+        if (!overlay) {
+            overlay = document.createElement('div');
+            overlay.id = 'chatbot-overlay';
+            overlay.className = 'chatbot-overlay';
+            
+            const container = document.createElement('div');
+            container.className = 'chatbot-container';
+            
+            // Pas de header - directement l'iframe
+            const iframe = document.createElement('iframe');
+            iframe.className = 'chatbot-iframe';
+            iframe.src = 'https://www.chatbase.co/chatbot-iframe/6knjac3THVFxv9czJZUqt?theme=dark';
+            iframe.allow = 'microphone';
+            iframe.title = 'Chatbot Niort Assistant';
+            
+            // SUPPRIMER LE BOUTON DE FERMETURE FLOTTANT
+            // const closeButton = document.createElement('button');
+            // closeButton.className = 'chatbot-close-floating';
+            // closeButton.innerHTML = '✕';
+            // closeButton.setAttribute('aria-label', 'Fermer le chatbot');
+            // closeButton.onclick = closeChatbot;
+            
+            container.appendChild(iframe);
+            // container.appendChild(closeButton); // COMMENTÉ POUR SUPPRIMER LA CROIX
+            overlay.appendChild(container);
+            document.body.appendChild(overlay);
+        }
+        
+        // Afficher avec animation
+        overlay.classList.add('active');
+        document.body.classList.add('no-scroll');
+        
+        // Gestionnaire pour fermer en cliquant sur le backdrop
+        overlay.onclick = (e) => {
+            if (e.target === overlay) {
+                closeChatbot();
+            }
+        };
+        
+        console.log('✅ Chatbot ouvert');
+        
+    } catch (error) {
+        console.error('❌ Erreur lors de l\'ouverture du chatbot:', error);
+        // Fallback : ouvrir dans un nouvel onglet
+        window.open('https://www.chatbase.co/chatbot-iframe/6knjac3THVFxv9czJZUqt?theme=dark', '_blank');
+    }
+}
+
+// Fermer le chatbot
+function closeChatbot() {
+    try {
+        const overlay = document.getElementById('chatbot-overlay');
+        if (overlay) {
+            overlay.classList.remove('active');
+            document.body.classList.remove('no-scroll');
+            
+            // NE PAS masquer avec display: none pour permettre la réouverture
+            // L'overlay est caché par opacity: 0 via la classe CSS
+        }
+        
+        console.log('✅ Chatbot fermé');
+    } catch (error) {
+        console.error('❌ Erreur lors de la fermeture du chatbot:', error);
+    }
+}
+
+// Fonction d'initialisation principale
 function initApplication() {
     try {
         detectSystemTheme();
@@ -655,7 +706,6 @@ function initApplication() {
         initErrorHandling();
         initPerformanceOptimizations();
         
-        // AJOUT : Initialisation de la recherche avec un petit délai
         setTimeout(() => {
             initSearch();
         }, 100);
@@ -663,10 +713,9 @@ function initApplication() {
         console.log('✅ Niort Assistant initialisé avec succès');
     } catch (error) {
         console.error('❌ Erreur lors de l\'initialisation:', error);
-        // Application minimale en cas d'erreur
+        // Initialisation minimale en cas d'erreur
         initTheme();
         initFAQ();
-        // Tenter d'initialiser la recherche même en cas d'erreur
         setTimeout(() => {
             try {
                 initSearch();
@@ -677,17 +726,17 @@ function initApplication() {
     }
 }
 
-// MODIFICATION DES RACCOURCIS CLAVIER EXISTANTS
-// Remplace ta section de raccourcis clavier par celle-ci :
+// Initialisation au chargement de la page
+document.addEventListener('DOMContentLoaded', initApplication);
+
+// Gestion des raccourcis clavier
 document.addEventListener('keydown', (e) => {
     try {
-        // Ctrl/Cmd + D pour changer de thème
         if ((e.ctrlKey || e.metaKey) && e.key === 'd') {
             e.preventDefault();
             toggleTheme();
         }
         
-        // AJOUT : Ctrl/Cmd + F pour focus sur la recherche
         if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
             e.preventDefault();
             const searchInput = document.getElementById('searchInput');
@@ -697,10 +746,14 @@ document.addEventListener('keydown', (e) => {
             }
         }
         
-        // Echap pour fermer toutes les cartes FAQ
         if (e.key === 'Escape') {
+            const overlay = document.getElementById('chatbot-overlay');
+            if (overlay && overlay.classList.contains('active')) {
+                closeChatbot();
+                return;
+            }
+            
             closeAllCards();
-            // AJOUT : aussi pour fermer la recherche
             const searchInput = document.getElementById('searchInput');
             if (searchInput && document.activeElement === searchInput) {
                 searchInput.blur();
@@ -708,19 +761,16 @@ document.addEventListener('keydown', (e) => {
             }
         }
         
-        // Ctrl/Cmd + Shift + O pour ouvrir toutes les cartes
         if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'O') {
             e.preventDefault();
             openAllCards();
         }
         
-        // Ctrl/Cmd + Shift + C pour fermer toutes les cartes
         if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'C') {
             e.preventDefault();
             closeAllCards();
         }
         
-        // Home pour scroll vers le haut
         if (e.key === 'Home' && !e.target.matches('input, textarea')) {
             e.preventDefault();
             scrollToTop();
@@ -730,7 +780,48 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-// Exposition des nouvelles fonctions pour compatibilité
+// Exposition des fonctions globales pour compatibilité
+window.toggleTheme = toggleTheme;
+window.toggleCard = toggleCard;
+window.handleCardKeydown = handleCardKeydown;
+window.scrollToTop = scrollToTop;
+window.closeAllCards = closeAllCards;
+window.openAllCards = openAllCards;
 window.initSearch = initSearch;
 window.clearSearch = clearSearch;
 window.performSearch = performSearch;
+window.openChatbot = openChatbot;
+window.closeChatbot = closeChatbot;
+
+// Fonction de nettoyage pour éviter les fuites mémoire
+window.addEventListener('beforeunload', () => {
+    // Nettoyer les observers et listeners si nécessaire
+    document.removeEventListener('keydown', () => {});
+    
+    // Nettoyer le chatbot
+    const overlay = document.getElementById('chatbot-overlay');
+    if (overlay) {
+        overlay.remove();
+    }
+    
+    // Restaurer le scroll de la page
+    document.body.classList.remove('no-scroll');
+    
+    // Nettoyer les timeouts de surbrillance
+    if (highlightTimeout) {
+        clearTimeout(highlightTimeout);
+        highlightTimeout = null;
+    }
+});
+
+// Export pour utilisation en module si nécessaire
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        toggleTheme,
+        toggleCard,
+        handleCardKeydown,
+        initApplication,
+        openChatbot,
+        closeChatbot
+    };
+}
